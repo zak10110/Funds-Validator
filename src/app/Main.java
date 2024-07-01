@@ -1,9 +1,42 @@
 package app;
 
+import java.util.Scanner;
+
 public class Main {
-    public  static  void main(String[] args) {
 
-        System.out.println("Funds Validator App");
+    static double balance;
 
+    public static void main(String[] args) {
+        balance = getBalance();
+        balance = validateAmount(balance, getAmount());
+    }
+
+    private static double getBalance() {
+        return 1000.00;
+    }
+
+    private static double getAmount() {
+        System.out.printf("Balance is USD %.2f.%n" +
+                "Enter purchase amount, USD: ", balance);
+        Scanner scanner = new Scanner(System.in);
+        return scanner.nextDouble();
+    }
+    private static double validateAmount(double balance, double withdrawal) {
+        if (withdrawal > balance) {
+            try {
+                throw new FundsException("Insufficient funds!");
+            } catch (FundsException ex) {
+                System.out.println(ex.getMessage());
+            }
+            return balance;
+        } else {
+            balance = getBalanceAfterWithdrawal(balance, withdrawal);
+            System.out.printf("Funds are OK. Purchase paid.%n" +
+                    "Balance is USD %.2f%n", balance);
+            return balance;
+        }
+    }
+    private static double getBalanceAfterWithdrawal(double balance, double withdrawal) {
+        return balance - withdrawal;
     }
 }
